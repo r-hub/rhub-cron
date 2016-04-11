@@ -8,7 +8,7 @@ var jenkins_url = process.env.JENKINS_URL ||
 // Time limit to delete job
 var TIME_LIMIT = 1000 /* ms */ * 60 /* s */ * 60 /* min */ * 24 * 3;
 // How often to run the job reaper, once an hour, at **:42:42
-var CRON_JOB_REAPER = '*/5 * * * * *';
+var CRON_JOB_REAPER = '42 42 * * * *';
 
 var job = new CronJob(CRON_JOB_REAPER, function() {
 
