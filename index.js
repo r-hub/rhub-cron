@@ -8,7 +8,7 @@ var jenkins_url = process.env.JENKINS_URL ||
 // Time limit to delete job
 var TIME_LIMIT = 1000 /* ms */ * 60 /* s */ * 60 /* min */ * 24 * 3;
 // How often to run the job reaper, once an hour, at **:42:42
-var CRON_JOB_REAPER = '42 42 * * * *';
+var CRON_JOB_REAPER = '48 45 * * * *';
 
 var job = new CronJob(CRON_JOB_REAPER, function() {
 
@@ -30,6 +30,12 @@ function delete_if_old(jen, job, callback) {
 	    console.log('Cannot get Jenkins job ' + job.name);
 	    return callback(null);
 	}
+
+	// No builds (yet?)
+	if (! data.lastBuild || ! data.lastBuild.number) {
+	    return callback(null);
+	}
+
 	jen.build.get(job.name, data.lastBuild.number, function(err, data) {
 	    if (err) {
 		console.log('Cannot get Jenkins build ' + job.name + ' ' +
