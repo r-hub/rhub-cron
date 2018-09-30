@@ -26,9 +26,24 @@ var job = new CronJob(CRON_JOB_REAPER, function() {
 
 function delete_if_old(jen, job, callback) {
     jen.job.get(job.name, function(err, data) {
-	if (err) {
+        if (err) {
 	    console.log('Cannot get Jenkins job ' + job.name);
 	    return callback(null);
+	}
+
+        if (data.actions) {
+	  for (i = 0; i < data.actions.length; i++) {
+	    var def = data.actions[i].parameterDefinitions;
+	    if (def === undefined) continue;
+	    for (j = 0; j < def.length; j++) {
+	      if (def[j].name == 'keep') {
+		if (def[j].defaultParameterValue.value) {
+		  console.log('Keeping ' + job.name);
+		  return callback(null);
+		}
+	      }
+	    }
+	  }
 	}
 
 	// No builds (yet?)
