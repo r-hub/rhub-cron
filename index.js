@@ -59,7 +59,7 @@ function delete_job(jen, job, callback) {
 	} else {
 	    console.log('Deleted Jenkins job ' + job.name);
 	}
-	return(null);
+	return callback(null);
     });
 }
 
